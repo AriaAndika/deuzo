@@ -1,3 +1,23 @@
+body{font-family: sans-serif;}
 h1{
-	background-color: #334;
+	text-align: center;
+}
+.container{
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: 300px 300px;
+	/* text-align: center; */
+}
+.container > *{
+	box-shadow: 1px 1px 4px -1px #334;
+	padding: 1rem;
+	border-radius: 10px;
+	transition: .3s;
+}
+.container > :hover{
+	box-shadow: 1px 1px 6px -1px #112;
+}
+div:has(> .container){
+	display: flex;
+	justify-content: center;
 }

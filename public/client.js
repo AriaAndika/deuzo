@@ -1,1 +1,3 @@
-console.log( "very nice" )
+document.querySelectorAll('[ref]').forEach( e => {
+	window[e.getAttribute('ref')] = e;
+})

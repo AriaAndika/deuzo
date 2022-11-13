@@ -1,6 +1,6 @@
-import { listen } from "./server/router.js";
+import { listen } from "./core/router.js";
 import { readFile } from "fs/promises";
-import { readdirRecursive, If } from "./server/utility.js";
+import { readdirRecursive } from "./core/utility.js";
 
 // todo: error handling
 
@@ -12,7 +12,6 @@ process.meta = JSON.parse( await readFile('deuzo.json','utf-8') )
 if (process.meta.public){
 	process.public = await readdirRecursive(process.meta.public);
 }
-// If(process.meta.public, dir => process.public = readdirRecursive(dir) )
 
 
 

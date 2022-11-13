@@ -2,10 +2,23 @@
 	.em{
 		color: blue;
 	}
+	body{
+		background-color: #112;
+		color: white;
+	}
 </style>
-
+<head>
+	<title>Feedback</title>
+</head>
 
 <h1> Feedback</h1>
-<p>{{path}}</p>
+<p>Rewrite from: {{path}}</p>
 
 <p class="em">Embedded CSS</p>
+
+<p>Loop Preprocessor</p>
+<ul>
+	{{for nice}}
+	<li>{{}}</li>
+	{{endfor}}
+</ul>

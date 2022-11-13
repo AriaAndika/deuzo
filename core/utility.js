@@ -17,12 +17,12 @@ export function parseUrl(url) {
 }
 
 
-/** @param {boolean} condition @param {Function} calltrue @param {Function?} callfalse */
+/** @param {boolean} condition @param {Function?} calltrue @param {Function?} callfalse */
 export function If(condition,calltrue,callfalse) {
 	if (condition) 
-		calltrue(condition);
+		return calltrue?.(condition) ?? true;
 	else 
-		callfalse?.();
+		return callfalse?.() ?? false;
 }
 /** if async will always return void 
  * @param {boolean} condition 
@@ -61,4 +61,9 @@ export async function readdirRecursive(dir) {
 	}
 	
 	return out;
+}
+
+/** @param {Array} ar */
+export function arLast(ar) {
+	return ar[ar.length-1];
 }

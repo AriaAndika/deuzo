@@ -1,5 +1,10 @@
-export default function( {path} ) {
+
+/**
+ * @param {Head} data
+ */
+export default function({ path }) {
+	
 	return {
-		data : {path}
+		data : {path,nice: [12,34,56,78]}
 	}
 }
