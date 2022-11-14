@@ -1,24 +1,47 @@
+// @ts-check
 
-
-/** @param {string} html */
+/**
+ * @param {string} html
+ * @param {{ [x: string]: any; }} data
+ */
 export function parseHTML(html,data) {
 	const stack = []
+	const regHead = `{{\\s*for\\s+?\\w+?\\s+?as\\s+\\w+?\\s*?}}`;
+	const regEnd = `{{\\s*endfor\\s*}}`
+
+	// console.log(  html.match(RegExp(`${regHead}[\\s\\S]+?${regEnd}`,'g') ))
+	
 	
 	// for
-	
-	html.match( /{{\s*for \w+?\s*?}}[\s\S]+{{\s*endfor\s*}}/g ).forEach( elem => {
+	html.match( RegExp(`${regHead}[\\s\\S]+?${regEnd}`,'g') )?.forEach( loop => {
 		let out = '';
-		let inner = elem.replace(/({{\s*for \w+?\s*?}}|{{\s*endfor\s*}})/g,'');
-		let varname = elem.match(/{{\s*for \w+?\s*?}}/)[0].replace(/({{|}}|for)/g,'').trim();
-		let key = data[varname];
 		
-		if (!key) return;
+		const loopHead = loop.match(	RegExp(regHead))?.[0] || undefined;
+		let [,loopTarget,,loopId] = loopHead?.substring(2,loopHead.length-2).trim().split(' ') || '';
+		let inner = loop.replace( RegExp(`(${regHead}|${regEnd})`,'g') ,'');
 		
-		for (let i = 0; i < key.length; i++) {
-			out += inner.replace(/{{}}/g,key[i]);
+		const placeholder = [...inner.match( RegExp(`{{\\s*?${loopId}\\S*?\\s*?}}`,'g') ) || ''];
+		
+		// if array
+		if (typeof data[loopTarget][0] != 'object' ){
+			for (let dataItr = 0; dataItr < data[loopTarget].length; dataItr++) {
+				out += inner.replace(RegExp(placeholder[0],'g'),data[loopTarget][dataItr]);
+			}
+			stack.push([loop,out]);
+			return;
 		}
 		
-		stack.push([elem,out]);
+		const parsing = (dataItr,placehldItr) => 
+		Function('idx', `return idx${placeholder[placehldItr].substring(2, placeholder[placehldItr].length - 2).trim().replace(loopId, '')}`)(data[loopTarget][dataItr])
+		
+		for (let dataItr = 0; dataItr < data[loopTarget].length; dataItr++) {
+			let o = inner;
+			for (let plchdrItr = 0; plchdrItr < placeholder.length; plchdrItr++) {
+				o = o.replace(placeholder[plchdrItr], parsing(dataItr,plchdrItr) );
+			}
+			out += o;
+		}
+		stack.push([loop,out]);
 	})
 	
 	// variables
@@ -32,5 +55,3 @@ export function parseHTML(html,data) {
 	
 	return html;
 }
-
-

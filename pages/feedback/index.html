@@ -18,7 +18,27 @@
 
 <p>Loop Preprocessor</p>
 <ul>
-	{{for nice}}
-	<li>{{}}</li>
+	{{for re as th}}
+	<li>
+		<h2>{{th.title}}</h2>
+		<p>{{th.description}}</p>
+	</li>
+	{{endfor}}
+</ul>
+
+<p>Object Iterator</p>
+<ul>
+	{{for sp as td}}
+	<li>{{td}}</li>
+	{{endfor}}
+</ul>
+
+<p>Multidimension Array</p>
+<ul>
+	{{for ar as eg}}
+	<li>
+		now : {{eg[0]}}
+		then : {{eg[1]}}
+	</li>
 	{{endfor}}
 </ul>
